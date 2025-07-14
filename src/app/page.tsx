@@ -2,7 +2,9 @@
 
 import { Timer } from '@/components/timer'
 import { SetTimerDialog } from '@/components/set-timer-dialog'
+import { NotesList } from '@/components/notes-list'
 import { Button } from '@/components/ui/button'
+//import { Separator } from '@/components/ui/separator'
 import { useTimerStore } from '@/store/timer-store'
 import { Settings } from 'lucide-react'
 
@@ -25,7 +27,7 @@ function SetTimerButton() {
 export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="container mx-auto max-w-4xl pt-8">
+      <div className="container mx-auto max-w-6xl pt-8">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             Pomodoro Timer
@@ -35,9 +37,15 @@ export default function Home() {
           </p>
         </div>
         
-        <div className="flex flex-col items-center space-y-6">
-          <Timer />
-          <SetTimerButton />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+          <div className="flex flex-col items-center space-y-6">
+            <Timer />
+            <SetTimerButton />
+          </div>
+
+          <div className="lg:sticky lg:top-8">
+            <NotesList />
+          </div>
         </div>
       </div>
     </main>
