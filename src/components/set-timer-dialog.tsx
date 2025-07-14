@@ -1,118 +1,106 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useTimerStore } from "@/store/timer-store";
+import { useState } from 'react'
+import { useTimerStore } from '@/store/timer-store'
 import {
   Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Settings } from "lucide-react";
+  DialogContent,
+  DialogActions,
+  Button,
+  TextField,
+  Box,
+  Typography,
+  Chip,
+  Stack
+} from '@mui/material'
+import { Settings } from '@mui/icons-material'
 
 interface SetTimerDialogProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function SetTimerDialog({ children }: SetTimerDialogProps) {
-  const { workDuration, setWorkDuration } = useTimerStore();
-  const [tempDuration, setTempDuration] = useState(workDuration.toString());
-  const [open, setOpen] = useState(false);
+  const { workDuration, setWorkDuration } = useTimerStore()
+  const [tempDuration, setTempDuration] = useState(workDuration.toString())
+  const [open, setOpen] = useState(false)
 
   const handleSave = () => {
-    const duration = parseInt(tempDuration);
+    const duration = parseInt(tempDuration)
     if (duration > 0 && duration <= 120) {
-      setWorkDuration(duration);
-      setOpen(false);
+      setWorkDuration(duration)
+      setOpen(false)
     }
-  };
+  }
 
   const handleCancel = () => {
-    setTempDuration(workDuration.toString());
-    setOpen(false);
-  };
+    setTempDuration(workDuration.toString())
+    setOpen(false)
+  }
 
-  const handleOpenChange = (newOpen: boolean) => {
-    if (newOpen) {
-      setTempDuration(workDuration.toString());
-    }
-    setOpen(newOpen);
-  };
+  const handleOpen = () => {
+    setTempDuration(workDuration.toString())
+    setOpen(true)
+  }
 
   // Preset times
-  const presetTimes = [15, 25, 30, 45, 60];
+  const presetTimes = [15, 25, 30, 45, 60]
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Set Timer Duration</DialogTitle>
-          <DialogDescription>
+    <>
+      <Box onClick={handleOpen}>
+        {children}
+      </Box>
+      
+      <Dialog open={open} onClose={handleCancel} maxWidth="sm" fullWidth>
+        <DialogTitle>Set Timer Duration</DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
             Choose your preferred timer duration in minutes.
-          </DialogDescription>
-        </DialogHeader>
+          </Typography>
 
-        <div className="grid gap-4 py-4">
           {/* Preset Buttons */}
-          <div className="space-y-2">
-            <Label>Quick Select (minutes)</Label>
-            <div className="flex flex-wrap gap-2">
+          <Box sx={{ mb: 3 }}>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>
+              Quick Select (minutes)
+            </Typography>
+            <Stack direction="row" spacing={1} flexWrap="wrap">
               {presetTimes.map((time) => (
-                <Button
+                <Chip
                   key={time}
-                  variant={
-                    tempDuration === time.toString() ? "default" : "outline"
-                  }
-                  size="sm"
+                  label={`${time}m`}
+                  variant={tempDuration === time.toString() ? "filled" : "outlined"}
+                  color={tempDuration === time.toString() ? "primary" : "default"}
                   onClick={() => setTempDuration(time.toString())}
-                >
-                  {time}m
-                </Button>
+                  sx={{ cursor: 'pointer' }}
+                />
               ))}
-            </div>
-          </div>
+            </Stack>
+          </Box>
 
           {/* Custom Input */}
-          <div className="space-y-2">
-            <Label htmlFor="duration">Custom Duration (minutes)</Label>
-            <Input
-              id="duration"
-              type="number"
-              min="1"
-              max="120"
-              value={tempDuration}
-              onChange={(e) => setTempDuration(e.target.value)}
-              placeholder="Enter minutes..."
-            />
-            <p className="text-xs text-muted-foreground">
-              Range: 1-120 minutes
-            </p>
-          </div>
-        </div>
+          <TextField
+            label="Custom Duration (minutes)"
+            type="number"
+            fullWidth
+            value={tempDuration}
+            onChange={(e) => setTempDuration(e.target.value)}
+            inputProps={{ min: 1, max: 120 }}
+            helperText={`${tempDuration?.length || 0} - Range: 1-120 minutes`}
+          />
+        </DialogContent>
 
-        <DialogFooter>
-          <Button variant="outline" onClick={handleCancel}>
-            Cancel
-          </Button>
-          <Button
+        <DialogActions>
+          <Button onClick={handleCancel}>Cancel</Button>
+          <Button 
             onClick={handleSave}
-            disabled={
-              !tempDuration ||
-              parseInt(tempDuration) < 1 ||
-              parseInt(tempDuration) > 120
-            }
+            variant="contained"
+            disabled={!tempDuration || parseInt(tempDuration) < 1 || parseInt(tempDuration) > 120}
           >
             Set Timer
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
-  );
+        </DialogActions>
+      </Dialog>
+    </>
+  )
 }

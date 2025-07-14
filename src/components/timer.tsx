@@ -1,10 +1,21 @@
 'use client'
 
 import { useTimer } from '@/hooks/use-timer'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Play, Pause, Square, RotateCcw } from 'lucide-react'
+import { 
+  Card, 
+  CardContent, 
+  Typography, 
+  LinearProgress, 
+  IconButton,
+  Box,
+  Chip
+} from '@mui/material'
+import { 
+  PlayArrow, 
+  Pause, 
+  Stop, 
+  Refresh 
+} from '@mui/icons-material'
 
 export function Timer() {
   const {
@@ -28,68 +39,87 @@ export function Timer() {
   }
 
   return (
-    <Card className="w-full max-w-md mx-auto">
-      <CardHeader className="text-center">
-        <CardTitle className="text-6xl font-mono font-bold tracking-wider">
+    <Card sx={{ width: '100%', maxWidth: 400, mx: 'auto' }}>
+      <CardContent sx={{ textAlign: 'center', p: 4 }}>
+        <Typography
+          variant="h1"
+          component="div"
+          sx={{
+            fontFamily: 'monospace',
+            fontSize: '4rem',
+            fontWeight: 'bold',
+            letterSpacing: '0.1em',
+            mb: 3
+          }}
+        >
           {formatTime(timeRemaining)}
-        </CardTitle>
-      </CardHeader>
-      
-      <CardContent className="space-y-6">
+        </Typography>
+
         {/* Progress Bar */}
-        <div className="space-y-2">
-          <Progress value={getProgress()} className="h-2" />
-          <p className="text-sm text-muted-foreground text-center">
+        <Box sx={{ mb: 3 }}>
+          <LinearProgress 
+            variant="determinate" 
+            value={getProgress()} 
+            sx={{ height: 8, borderRadius: 4, mb: 1 }}
+          />
+          <Typography variant="body2" color="text.secondary">
             {Math.round(getProgress())}% complete
-          </p>
-        </div>
+          </Typography>
+        </Box>
 
         {/* Control Buttons */}
-        <div className="flex justify-center space-x-2">
-          <Button
+        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1, mb: 3 }}>
+          <IconButton
             onClick={handlePlayPause}
-            size="lg"
-            className="w-20"
+            size="large"
+            color="primary"
+            sx={{ 
+              width: 60, 
+              height: 60,
+              bgcolor: 'primary.main',
+              color: 'white',
+              '&:hover': {
+                bgcolor: 'primary.dark'
+              }
+            }}
           >
-            {isRunning ? (
-              <Pause className="h-5 w-5" />
-            ) : (
-              <Play className="h-5 w-5" />
-            )}
-          </Button>
+            {isRunning ? <Pause /> : <PlayArrow />}
+          </IconButton>
           
-          <Button
+          <IconButton
             onClick={stopTimer}
-            variant="outline"
-            size="lg"
-            className="w-20"
+            size="large"
+            sx={{ width: 60, height: 60 }}
           >
-            <Square className="h-5 w-5" />
-          </Button>
+            <Stop />
+          </IconButton>
           
-          <Button
+          <IconButton
             onClick={resetTimer}
-            variant="outline"
-            size="lg"
-            className="w-20"
+            size="large"
+            sx={{ width: 60, height: 60 }}
           >
-            <RotateCcw className="h-5 w-5" />
-          </Button>
-        </div>
+            <Refresh />
+          </IconButton>
+        </Box>
 
         {/* Status Info */}
-        <div className="text-center space-y-2">
+        <Box>
           {isPaused && (
-            <p className="text-sm text-yellow-600 font-medium">
-              Timer Paused
-            </p>
+            <Chip 
+              label="Timer Paused" 
+              color="warning" 
+              sx={{ mb: 1 }}
+            />
           )}
           {timeRemaining === 0 && (
-            <p className="text-sm text-green-600 font-medium">
-              Timer Complete! 🎉
-            </p>
+            <Chip 
+              label="Timer Complete! 🎉" 
+              color="success" 
+              sx={{ mb: 1 }}
+            />
           )}
-        </div>
+        </Box>
       </CardContent>
     </Card>
   )

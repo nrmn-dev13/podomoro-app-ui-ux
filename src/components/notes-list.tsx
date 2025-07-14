@@ -3,20 +3,23 @@
 import { useState } from 'react'
 import { useNotesStore, type Note } from '@/store/notes-store'
 import { NoteDialog } from './note-dialog'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import { Edit, Trash2, Plus } from 'lucide-react'
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Button,
+  IconButton,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  DialogContentText,
+  Chip,
+  Stack
+} from '@mui/material'
+import { Edit, Delete, Add } from '@mui/icons-material'
 
 export function NotesList() {
   const { notes, deleteNote } = useNotesStore()
@@ -48,76 +51,132 @@ export function NotesList() {
   }
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold text-gray-900">Notes</h2>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+        <Typography variant="h2" component="h2" color="text.primary">
+          Notes
+        </Typography>
         <NoteDialog>
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            sx={{ gap: 1 }}
+          >
             Add Note
           </Button>
         </NoteDialog>
-      </div>
+      </Box>
 
       {notes.length === 0 ? (
         <Card>
-          <CardContent className="flex flex-col items-center justify-center py-8">
-            <p className="text-muted-foreground mb-4">No notes yet</p>
+          <CardContent sx={{ textAlign: 'center', py: 6 }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 3 }}>
+              No notes yet
+            </Typography>
             <NoteDialog>
-              <Button variant="outline" className="gap-2">
-                <Plus className="h-4 w-4" />
+              <Button
+                variant="outlined"
+                startIcon={<Add />}
+                sx={{ gap: 1 }}
+              >
                 Create your first note
               </Button>
             </NoteDialog>
           </CardContent>
         </Card>
       ) : (
-        <ScrollArea className="h-[400px]">
-          <div className="space-y-3">
+        <Box 
+          sx={{ 
+            height: 400, 
+            overflow: 'auto', 
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: '#f1f1f1',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: '#c1c1c1',
+              borderRadius: '4px',
+            },
+          }}
+        >
+          <Stack spacing={2}>
             {notes.map((note) => (
-              <Card key={note.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <CardTitle className="text-lg line-clamp-1">
-                        {note.title}
-                      </CardTitle>
-                      <CardDescription className="text-sm">
-                        {formatDate(note.updatedAt)}
-                      </CardDescription>
-                    </div>
-                    <div className="flex gap-1 ml-2">
-                      <Button
-                        variant="ghost"
-                        size="sm"
+              <Card 
+                key={note.id} 
+                sx={{ 
+                  transition: 'box-shadow 0.2s',
+                  '&:hover': {
+                    boxShadow: 4
+                  }
+                }}
+              >
+                <CardHeader
+                  title={
+                    <Typography 
+                      variant="h6" 
+                      component="h3"
+                      sx={{
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        whiteSpace: 'nowrap',
+                        pr: 1
+                      }}
+                    >
+                      {note.title}
+                    </Typography>
+                  }
+                  subheader={
+                    <Typography variant="caption" color="text.secondary">
+                      {formatDate(note.updatedAt)}
+                    </Typography>
+                  }
+                  action={
+                    <Box>
+                      <IconButton
+                        size="small"
                         onClick={() => handleEdit(note)}
+                        sx={{ mr: 0.5 }}
                       >
-                        <Edit className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
+                        <Edit fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
                         onClick={() => handleDelete(note)}
+                        color="error"
                       >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-                </CardHeader>
+                        <Delete fontSize="small" />
+                      </IconButton>
+                    </Box>
+                  }
+                  sx={{ pb: note.description ? 1 : 2 }}
+                />
                 {note.description && (
-                  <CardContent className="pt-0">
-                    <p className="text-sm text-muted-foreground line-clamp-3">
+                  <CardContent sx={{ pt: 0 }}>
+                    <Typography 
+                      variant="body2" 
+                      color="text.secondary"
+                      sx={{
+                        display: '-webkit-box',
+                        WebkitLineClamp: 3,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis'
+                      }}
+                    >
                       {note.description}
-                    </p>
+                    </Typography>
                   </CardContent>
                 )}
               </Card>
             ))}
-          </div>
-        </ScrollArea>
+          </Stack>
+        </Box>
       )}
 
-      {/* Edit Dialog - FIXED: Now uses controlled mode */}
+      {/* Edit Dialog */}
       {editingNote && (
         <NoteDialog
           note={editingNote}
@@ -127,25 +186,28 @@ export function NotesList() {
       )}
 
       {/* Delete Confirmation Dialog */}
-      <AlertDialog open={!!noteToDelete} onOpenChange={() => setNoteToDelete(null)}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the note 
-              "{noteToDelete?.title}".
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={() => setNoteToDelete(null)}>
-              Cancel
-            </AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
+      <Dialog
+        open={!!noteToDelete}
+        onClose={() => setNoteToDelete(null)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Are you sure?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This action cannot be undone. This will permanently delete the note 
+            "{noteToDelete?.title}".
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setNoteToDelete(null)}>
+            Cancel
+          </Button>
+          <Button onClick={confirmDelete} color="error" variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   )
 }

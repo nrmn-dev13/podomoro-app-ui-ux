@@ -3,10 +3,15 @@
 import { Timer } from '@/components/timer'
 import { SetTimerDialog } from '@/components/set-timer-dialog'
 import { NotesList } from '@/components/notes-list'
-import { Button } from '@/components/ui/button'
-//import { Separator } from '@/components/ui/separator'
+import { 
+  Container, 
+  Typography, 
+  Box, 
+  Button,
+  Paper
+} from '@mui/material'
 import { useTimerStore } from '@/store/timer-store'
-import { Settings } from 'lucide-react'
+import { Settings } from '@mui/icons-material'
 
 function SetTimerButton() {
   const { isRunning, isPaused } = useTimerStore()
@@ -16,8 +21,11 @@ function SetTimerButton() {
 
   return (
     <SetTimerDialog>
-      <Button variant="outline" size="lg" className="gap-2">
-        <Settings className="h-4 w-4" />
+      <Button
+        variant="outlined"
+        size="large"
+        startIcon={<Settings />}
+      >
         Set Timer
       </Button>
     </SetTimerDialog>
@@ -26,28 +34,73 @@ function SetTimerButton() {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="container mx-auto max-w-6xl pt-8">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+    <Box
+      sx={{
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%)',
+        py: 4
+      }}
+    >
+      <Container maxWidth="xl">
+        <Box sx={{ textAlign: 'center', mb: 6 }}>
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{
+              fontSize: { xs: '2.5rem', md: '3.5rem' },
+              fontWeight: 700,
+              color: 'text.primary',
+              mb: 1
+            }}
+          >
             Pomodoro Timer
-          </h1>
-          <p className="text-gray-600">
+          </Typography>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            sx={{ fontWeight: 400 }}
+          >
             Boost your productivity with the Pomodoro Technique
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-          <div className="flex flex-col items-center space-y-6">
+          </Typography>
+        </Box>
+
+        {/* CSS Grid Solution - No TypeScript issues */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { 
+              xs: '1fr',           // Mobile: 1 column
+              lg: '1fr 1fr'        // Desktop: 2 columns
+            },
+            gap: 4,
+            alignItems: 'start'
+          }}
+        >
+          {/* Timer Section */}
+          <Box sx={{ 
+            display: 'flex', 
+            flexDirection: 'column', 
+            alignItems: 'center', 
+            gap: 3 
+          }}>
             <Timer />
             <SetTimerButton />
-          </div>
+          </Box>
 
-          <div className="lg:sticky lg:top-8">
+          {/* Notes Section */}
+          <Paper 
+            elevation={2}
+            sx={{ 
+              p: 3,
+              position: { lg: 'sticky' },
+              top: { lg: 32 },
+              borderRadius: 2
+            }}
+          >
             <NotesList />
-          </div>
-        </div>
-      </div>
-    </main>
+          </Paper>
+        </Box>
+      </Container>
+    </Box>
   )
 }
