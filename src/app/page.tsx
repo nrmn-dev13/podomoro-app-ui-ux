@@ -1,12 +1,10 @@
 'use client'
 
 import { Timer } from '@/components/timer'
-import { NotesList } from '@/components/notes-list'
 import { 
   Container, 
   Typography, 
-  Box, 
-  Paper
+  Box
 } from '@mui/material'
 
 export default function Home() {
@@ -41,40 +39,8 @@ export default function Home() {
           </Typography>
         </Box>
 
-        {/* CSS Grid Layout */}
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { 
-              xs: '1fr',           // Mobile: 1 column
-              lg: '1fr 1fr'        // Desktop: 2 columns
-            },
-            gap: 4,
-            alignItems: 'start'
-          }}
-        >
-          {/* Timer Section */}
-          <Box sx={{ 
-            display: 'flex', 
-            flexDirection: 'column', 
-            alignItems: 'center'
-          }}>
-            <Timer />
-          </Box>
-
-          {/* Notes Section */}
-          <Paper 
-            elevation={2}
-            sx={{ 
-              p: 3,
-              position: { lg: 'sticky' },
-              top: { lg: 32 },
-              borderRadius: 2
-            }}
-          >
-            <NotesList />
-          </Paper>
-        </Box>
+        {/* All-in-One Timer Component */}
+        <Timer />
       </Container>
     </Box>
   )
