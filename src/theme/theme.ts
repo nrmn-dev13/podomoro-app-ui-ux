@@ -5,9 +5,9 @@ export const theme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#3b82f6', // Blue-500
+      main: '#919191', // Blue-500
       light: '#60a5fa', // Blue-400
-      dark: '#2563eb', // Blue-600
+      dark: '#a3a3a3', // Blue-600
     },
     secondary: {
       main: '#919191', // Indigo-500
