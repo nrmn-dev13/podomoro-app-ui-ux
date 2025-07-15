@@ -1,1 +1,71 @@
 @tailwind utilities;
+
+.screen {
+  background-color: #c3e7f9;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.shine-lg {
+  width: 70px;
+  height: 250px;
+  background-color: #dff4ff;
+  display: block;
+  position: absolute;
+  top: -20px;
+  left: 110px;
+  transform: rotate(15deg);
+  z-index: 0;
+}
+.shine-sm {
+  width: 35px;
+  height: 250px;
+  background-color: #dff4ff;
+  display: block;
+  position: absolute;
+  top: -20px;
+  left: 190px;
+  transform: rotate(15deg);
+  z-index: 0;
+}
+.top-button {
+  background-color: #737373;
+  border-radius: 10px;
+  width: 200px;
+  height: 100px;
+  position: absolute;
+  top: -30px;
+  left: 32px;
+  z-index: 0;
+}
+.bottom-button {
+  background-color: #737373;
+  border-radius: 10px;
+  width: calc(100% - 64px);
+  height: 100px;
+  position: absolute;
+  bottom: -30px;
+  left: 32px;
+  z-index: 0;
+}
+.top-button-sm {
+  background-color: #737373;
+  border-radius: 10px;
+  width: 100px;
+  height: 100px;
+}
+.button-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  position: absolute;
+  top: -30px;
+  right: 32px;
+  z-index: 0;
+}
+.bottom-button.expanded {
+  z-index: -1;
+}

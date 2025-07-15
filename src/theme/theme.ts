@@ -10,9 +10,21 @@ export const theme = createTheme({
       dark: '#2563eb', // Blue-600
     },
     secondary: {
-      main: '#6366f1', // Indigo-500
+      main: '#919191', // Indigo-500
       light: '#818cf8', // Indigo-400
-      dark: '#4f46e5', // Indigo-600
+      dark: '#a3a3a3', // Indigo-600
+    },
+    success: {
+      main: '#97F7AC', // Indigo-500
+      light: '#bcfcca', // Indigo-500
+    },
+    error: {
+      main: '#FC908C', // Indigo-500
+      light: '#ffbab7', // Indigo-500
+    },
+    warning: {
+      main: '#f0c52c', // Indigo-500
+      light: '#e7ce76', // Indigo-500
     },
     background: {
       default: '#f8fafc', // Slate-50
