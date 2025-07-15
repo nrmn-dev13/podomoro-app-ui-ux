@@ -1,36 +1,13 @@
 'use client'
 
 import { Timer } from '@/components/timer'
-import { SetTimerDialog } from '@/components/set-timer-dialog'
 import { NotesList } from '@/components/notes-list'
 import { 
   Container, 
   Typography, 
   Box, 
-  Button,
   Paper
 } from '@mui/material'
-import { useTimerStore } from '@/store/timer-store'
-import { Settings } from '@mui/icons-material'
-
-function SetTimerButton() {
-  const { isRunning, isPaused } = useTimerStore()
-  const isInitialOrStopped = !isRunning && !isPaused
-
-  if (!isInitialOrStopped) return null
-
-  return (
-    <SetTimerDialog>
-      <Button
-        variant="outlined"
-        size="large"
-        startIcon={<Settings />}
-      >
-        Set Timer
-      </Button>
-    </SetTimerDialog>
-  )
-}
 
 export default function Home() {
   return (
@@ -64,7 +41,7 @@ export default function Home() {
           </Typography>
         </Box>
 
-        {/* CSS Grid Solution - No TypeScript issues */}
+        {/* CSS Grid Layout */}
         <Box
           sx={{
             display: 'grid',
@@ -80,11 +57,9 @@ export default function Home() {
           <Box sx={{ 
             display: 'flex', 
             flexDirection: 'column', 
-            alignItems: 'center', 
-            gap: 3 
+            alignItems: 'center'
           }}>
             <Timer />
-            <SetTimerButton />
           </Box>
 
           {/* Notes Section */}
